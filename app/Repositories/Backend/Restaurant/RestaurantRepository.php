@@ -18,6 +18,7 @@ use App\Modules\Models\Card\Card;
 use App\Modules\Models\Device\Device;
 use App\Modules\Models\PayMethod\PayMethod;
 use App\Modules\Models\Restaurant\Restaurant;
+use App\Modules\Models\Shop\Shop;
 use App\Modules\Repositories\Restaurant\BaseRestaurantRepository;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -49,8 +50,12 @@ class RestaurantRepository extends BaseRestaurantRepository
             DB::beginTransaction();
 
             $restaurant->save();
-
-            $this->createRestaurantUser($restaurant->id, $restaurant->uuid);
+            //创建默认分店
+            $shop=$this->createShopStub($restaurant->id);
+            $shop->save();
+            //Log::info("shop param:".json_encode($shop));
+            //创建默认管理员
+            $this->createRestaurantUser($restaurant->id, $restaurant->uuid,$shop->id);
             $this->createRestaurantPayMethod($restaurant->id);
 
             DB::commit();
@@ -213,7 +218,7 @@ class RestaurantRepository extends BaseRestaurantRepository
      * @param $restaurant_id
      * @param $restaurant_uuid
      */
-    private function createRestaurantUser($restaurant_id, $restaurant_uuid)
+    private function createRestaurantUser($restaurant_id, $restaurant_uuid,$shop_id)
     {
         $restaurant_user = new RestaurantUser();
         $restaurant_user->restaurant_id = $restaurant_id;
@@ -223,6 +228,7 @@ class RestaurantRepository extends BaseRestaurantRepository
         $restaurant_user->password = bcrypt('casher');
         $restaurant_user->status = 1;
         $restaurant_user->save();
+        $restaurant_user->shop_id = $shop_id;
 
         $restaurant_user->roles()->save(new RestaurantRole(['restaurant_id'=>$restaurant_id, 'name'=>'超级管理员', 'all' => 1, 'sort'=>1]));
     }
@@ -251,5 +257,15 @@ class RestaurantRepository extends BaseRestaurantRepository
         $this->createPayMethod($restaurant_id, PayMethodType::CARD, 1);
         $this->createPayMethod($restaurant_id, PayMethodType::ALIPAY, 0);
         $this->createPayMethod($restaurant_id, PayMethodType::WECHAT_PAY, 0);
+    }
+
+    //新建默认shop
+    private function createShopStub($restaurant_id){
+        $shop=new Shop();
+        $shop->restaurant_id = $restaurant_id;
+        $shop->name ='默认总店';
+        $shop->enabled=1;
+        $shop->default=1;
+        return $shop;
     }
 }
