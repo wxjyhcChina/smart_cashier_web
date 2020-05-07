@@ -227,8 +227,8 @@ class RestaurantRepository extends BaseRestaurantRepository
         $restaurant_user->last_name = '';
         $restaurant_user->password = bcrypt('casher');
         $restaurant_user->status = 1;
-        $restaurant_user->save();
         $restaurant_user->shop_id = $shop_id;
+        $restaurant_user->save();
 
         $restaurant_user->roles()->save(new RestaurantRole(['restaurant_id'=>$restaurant_id, 'name'=>'超级管理员', 'all' => 1, 'sort'=>1]));
     }
@@ -264,8 +264,10 @@ class RestaurantRepository extends BaseRestaurantRepository
         $shop=new Shop();
         $shop->restaurant_id = $restaurant_id;
         $shop->name ='默认总店';
-        $shop->enabled=1;
-        $shop->default=1;
+        $shop->enabled=1;//默认使用中
+        $shop->default=1;//默认标志
+        $shop->recharge_flag=1;//默认前台可充值
+        $shop->discount_flag=1;//默认前台可打折
         return $shop;
     }
 }
