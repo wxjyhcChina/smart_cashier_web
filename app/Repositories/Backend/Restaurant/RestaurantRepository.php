@@ -56,7 +56,7 @@ class RestaurantRepository extends BaseRestaurantRepository
             //Log::info("shop param:".json_encode($shop));
             //创建默认管理员
             $this->createRestaurantUser($restaurant->id, $restaurant->uuid,$shop->id);
-            $this->createRestaurantPayMethod($restaurant->id);
+            $this->createShopPayMethod($restaurant->id,$shop->id);
 
             DB::commit();
         }
@@ -235,13 +235,15 @@ class RestaurantRepository extends BaseRestaurantRepository
 
     /**
      * @param $restaurant_id
+     * @param $shop_id
      * @param $method
      * @param $enabled
      */
-    private function createPayMethod($restaurant_id, $method, $enabled)
+    private function createPayMethod($restaurant_id,$shop_id, $method, $enabled)
     {
         $payMethod = new PayMethod();
         $payMethod->restaurant_id = $restaurant_id;
+        $payMethod->shop_id = $shop_id;
         $payMethod->method = $method;
         $payMethod->enabled = $enabled;
         $payMethod->save();
@@ -251,12 +253,24 @@ class RestaurantRepository extends BaseRestaurantRepository
     /**
      * @param $restaurant_id
      */
-    private function createRestaurantPayMethod($restaurant_id)
+   /** private function createRestaurantPayMethod($restaurant_id)
     {
         $this->createPayMethod($restaurant_id, PayMethodType::CASH, 1);
         $this->createPayMethod($restaurant_id, PayMethodType::CARD, 1);
         $this->createPayMethod($restaurant_id, PayMethodType::ALIPAY, 0);
         $this->createPayMethod($restaurant_id, PayMethodType::WECHAT_PAY, 0);
+    }
+*/
+    /**
+     * @param $restaurant_id
+     * @param $shop_id
+     */
+    private function createShopPayMethod($restaurant_id,$shop_id)
+    {
+        $this->createPayMethod($restaurant_id,$shop_id, PayMethodType::CASH, 1);
+        $this->createPayMethod($restaurant_id,$shop_id, PayMethodType::CARD, 1);
+        $this->createPayMethod($restaurant_id,$shop_id, PayMethodType::ALIPAY, 0);
+        $this->createPayMethod($restaurant_id,$shop_id, PayMethodType::WECHAT_PAY, 0);
     }
 
     //新建默认shop
