@@ -10,6 +10,7 @@ use App\Repositories\Backend\Restaurant\RestaurantRepository;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Log;
 use Yajra\DataTables\Facades\DataTables;
 
 class RestaurantTableController extends Controller
@@ -104,6 +105,19 @@ class RestaurantTableController extends Controller
 
                 return $checked;
             })
+            ->make(true);
+    }
+
+
+    public function getShops(Restaurant $restaurant, ManageRestaurantRequest $request)
+    {
+        //
+        //Log::info("getShops restaurant:".json_encode($restaurant));
+        return DataTables::of($this->restaurantRepo->getShops($restaurant))
+            ->addColumn('actions', function ($user) {
+                return $user->action_buttons;
+            })
+            ->rawColumns(['actions'])
             ->make(true);
     }
 }

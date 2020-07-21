@@ -87,6 +87,15 @@
             </li>
             @endauth
 
+            @permission('manage-outer-device')
+            <li class="{{ active_class(Active::checkUriPattern('admin/outerDevice*')) }}">
+                <a href="{{ route('admin.outerDevice.index') }}">
+                    <i class="fa fa-hdd-o"></i>
+                    <span>{{ trans('menus.backend.outerDevice.title') }}</span>
+                </a>
+            </li>
+            @endauth
+
             @permission('manage-version-android')
             <li class="{{ active_class(Active::checkUriPattern('admin/versionAndroid*')) }}">
                 <a href="{{ route('admin.versionAndroid.index') }}">

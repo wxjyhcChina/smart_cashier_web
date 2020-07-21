@@ -25,6 +25,9 @@ Route::group([
         Route::get('accounts/{account}/password/change', 'RestaurantController@change_password')->name('restaurant.change-password');
         Route::patch('accounts/{account}/password/change', 'RestaurantController@change_password_store')->name('restaurant.change-password.post');
 
+        Route::get('shops', 'RestaurantController@shops')->name('restaurant.shops');
+        Route::get('shops/get', 'RestaurantTableController@getShops')->name('restaurant.getShops');
+
         Route::get('cards/create', 'RestaurantController@assignCard')->name('restaurant.assignCard');
         Route::post('cards/store', 'RestaurantController@assignCardStore')->name('restaurant.assignCardStore');
 

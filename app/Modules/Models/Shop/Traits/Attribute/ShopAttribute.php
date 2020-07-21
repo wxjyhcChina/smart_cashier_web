@@ -16,6 +16,10 @@ trait ShopAttribute
         return '<a href="' . route('admin.shop.edit', $this) . '" class="btn btn-xs btn-primary"><i class="fa fa-pencil" data-toggle="tooltip" data-placement="top" title="' . trans('buttons.general.crud.edit') . '"></i></a> ';
     }
 
+    public function getOuterDeviceButtonAttribute()
+    {
+        return '<a href="' . route('admin.shop.assignDevice', $this, false) . '" class="btn btn-xs btn-success"><i class="fa fa-hdd-o" data-toggle="tooltip" data-placement="top" title="' . trans('labels.backend.restaurant.outerDevice') . '"></i></a> ';
+    }
 
     /**
      * @return string
@@ -49,7 +53,8 @@ trait ShopAttribute
     public function getActionButtonsAttribute()
     {
         return
-            $this->edit_button;
+            $this->edit_button.
+            $this->outer_device_button ;
     }
 
     /**
@@ -58,6 +63,7 @@ trait ShopAttribute
     public function getRestaurantActionButtonsAttribute()
     {
         return
-            $this->edit_button;
+            $this->edit_button.
+            $this->outer_device_button;
     }
 }

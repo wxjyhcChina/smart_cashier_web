@@ -57,6 +57,13 @@ return [
             'import' => '导入设备',
         ],
 
+        'outerDevice' => [
+            'title' => '外接设备管理',
+            'all' => '所有外接设备',
+            'create' => '创建外接设备',
+            'import' => '导入外接设备',
+        ],
+
         'versionAndroid' => [
             'title' => '安卓版本管理',
             'all' => '所有安卓版本',

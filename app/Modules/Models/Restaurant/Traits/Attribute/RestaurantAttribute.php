@@ -48,6 +48,7 @@ trait RestaurantAttribute
         return '<a href="' . route('admin.restaurant.assignDevice', $this, false) . '" class="btn btn-xs btn-success"><i class="fa fa-hdd-o" data-toggle="tooltip" data-placement="top" title="' . trans('labels.backend.restaurant.assignDevice') . '"></i></a> ';
     }
 
+
     /**
      * @return string
      */
@@ -62,6 +63,14 @@ trait RestaurantAttribute
     public function getRechargeOrderButtonAttribute()
     {
         return '<a href="' . route('admin.restaurant.rechargeOrder', $this, false) . '" class="btn btn-xs btn-success"><i class="fa fa-exchange" data-toggle="tooltip" data-placement="top" title="' . trans('labels.backend.restaurant.rechargeOrder') . '"></i></a> ';
+    }
+
+    /**
+     * @return string
+     */
+    public function getShopButtonAttribute()
+    {
+        return '<a href="' . route('admin.restaurant.shops', $this) . '" class="btn btn-xs btn-success"><i class="fa fa-users" data-toggle="tooltip" data-placement="top" title="' . trans('labels.backend.restaurant.shop') . '"></i></a> ';
     }
 
     /**
@@ -97,6 +106,7 @@ trait RestaurantAttribute
         return
             $this->info_button .
             $this->account_button .
+            $this->shop_button .
             $this->edit_button .
             $this->assign_card_button .
             $this->assign_device_button .

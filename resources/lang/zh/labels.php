@@ -167,7 +167,19 @@ return [
                 'closed' => '已关闭',
             ]
         ],
+        'shop' => [
+            'management' => '子商户管理',
+            'active' => '所有子商户',
+            'edit' => '编辑子商户',
+            'create' => '创建子商户',
 
+            'table' => [
+                'id' => '编号',
+                'name' => '子商户名',
+                'default' => '默认商户',
+                'created_at' => '创建时间',
+            ]
+        ],
         'restaurant' => [
             'management' => '餐厅管理',
             'active' => '所有餐厅',
@@ -176,6 +188,8 @@ return [
             'info' => '餐厅详情',
             'account' => '餐厅账户',
             'assignCard' => '分配IC卡',
+            'shop' => '所有分店',
+            'outerDevice' => '所有外接设备',
             'assignDevice' => '分配设备',
             'consumeOrder' => '消费记录',
             'rechargeOrder' => '充值记录',
@@ -236,6 +250,23 @@ return [
             'table' => [
                 'id' => '编号',
                 'serial_id' => '设备串号',
+                'created_at' => '创建时间',
+            ]
+        ],
+
+        'outerDevice' => [
+            'management' => '外接设备管理',
+            'active' => '所有外接设备',
+            'edit' => '编辑外接设备',
+            'create' => '创建外接设备',
+            'import' => '导入外接设备',
+            'select' => '选择文件',
+
+            'table' => [
+                'id' => '编号',
+                'sources' => '来源',
+                'type' => '类型',
+                'url' => '外网地址',
                 'created_at' => '创建时间',
             ]
         ],

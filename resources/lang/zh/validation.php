@@ -169,7 +169,13 @@ return [
                 'getLocation' => '获取地理位置',
                 'map_address' => '地图地址',
             ],
-
+            'shop' => [
+                'name' => '子商户名',
+                'default' => '默认',
+                'discount'=>'是否前台打折',
+                'recharge'=>'是否前台充值',
+                'face'=>'是否使用人脸',
+            ],
             'card' => [
                 'number' => 'IC卡号',
                 'internal_number' => 'IC卡内部编码',
@@ -178,6 +184,16 @@ return [
 
             'device' => [
                 'serial_id' => '设备串号',
+            ],
+
+            'outerDevice' => [
+                'serial_id' => '设备串号',
+                'restaurant_id'=>'餐厅',
+                'shop_id'=>'小店',
+                'sources'=>'来源',
+                'type'=>'类型',
+                'url'=>'外网地址',
+                'enabled'=>'启用'
             ],
 
             'versionAndroid' => [

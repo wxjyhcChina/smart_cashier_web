@@ -190,6 +190,14 @@ class RestaurantRepository extends BaseRestaurantRepository
         });
     }
 
+    public function getShops($restaurant)
+    {
+
+        $shops=Shop::where('restaurant_id', $restaurant->id)->get();
+        //Log::info("getShops param:".json_encode($shops));
+        return $shops;
+    }
+
     /**
      * @param $input
      * @return Restaurant
@@ -282,6 +290,7 @@ class RestaurantRepository extends BaseRestaurantRepository
         $shop->default=1;//默认标志
         $shop->recharge_flag=1;//默认前台可充值
         $shop->discount_flag=1;//默认前台可打折
+        $shop->face_flag=0;//默认不使用人脸
         return $shop;
     }
 }

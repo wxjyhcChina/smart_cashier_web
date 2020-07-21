@@ -20,6 +20,7 @@ use App\Repositories\Backend\RechargeOrder\RechargeOrderRepository;
 use App\Repositories\Backend\Restaurant\RestaurantRepository;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -151,6 +152,13 @@ class RestaurantController extends Controller
         $this->restaurantRepo->update($restaurant, $request->all());
 
         return redirect()->route('admin.restaurant.index')->withFlashSuccess(trans('alerts.backend.restaurant.created'));
+    }
+
+    public function shops(Restaurant $restaurant, ManageRestaurantRequest $request)
+    {
+        //
+        //Log::info("restaurant:".json_encode($restaurant));
+        return view('backend.restaurant.shop')->withRestaurant($restaurant);
     }
 
     /**

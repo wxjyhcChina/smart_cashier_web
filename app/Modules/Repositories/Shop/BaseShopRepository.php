@@ -4,6 +4,8 @@ namespace App\Modules\Repositories\Shop;
 
 use App\Exceptions\Api\ApiException;
 use App\Modules\Enums\ErrorCode;
+use App\Modules\Models\Device\Device;
+use App\Modules\Models\OuterDevice\OuterDevice;
 use App\Modules\Models\Shop\Shop;
 use App\Modules\Repositories\BaseRepository;
 use Illuminate\Support\Facades\DB;
@@ -67,18 +69,9 @@ class BaseShopRepository extends BaseRepository
      */
     public function update(Shop $shop, $input)
     {
-        $this->shopExist($input['name'],$input['restaurant_id'], $shop);
-        Log::info("restaurant update param:".json_encode($input));
-
         try
         {
             DB::beginTransaction();
-            if (isset($input['default']) && $shop->default == false)
-            {
-                Shop::where('default', 1)
-                    ->where('restaurant_id', $input['restaurant_id'])
-                    ->update(['default' => false]);
-            }
 
             $shop->update($input);
 
@@ -109,6 +102,25 @@ class BaseShopRepository extends BaseRepository
 
         throw new ApiException(ErrorCode::DATABASE_ERROR, trans('exceptions.backend.shop.mark_error'));
     }
+
+    public function assignDevice($shop, $input){
+        DB::transaction(function() use ($input, $shop) {
+            OuterDevice::where('shop_id', $shop->id)->update(['shop_id' => null]);
+
+            if(array_key_exists('id', $input))
+            {
+                $ids = $input['id'];
+
+                for($i =0 ; $i < count($ids); $i++)
+                {
+                    $device = OuterDevice::find($ids[$i]);
+                    $device->shop_id = $shop->id;
+                    $device->save();
+                }
+            }
+        });
+    }
+
 
     /**
      * @param $input
