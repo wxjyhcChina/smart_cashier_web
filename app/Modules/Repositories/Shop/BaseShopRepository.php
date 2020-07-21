@@ -10,6 +10,7 @@ use App\Modules\Models\Shop\Shop;
 use App\Modules\Repositories\BaseRepository;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use GuzzleHttp;
 
 /**
  * Class BaseShopRepository.
@@ -115,7 +116,46 @@ class BaseShopRepository extends BaseRepository
                 {
                     $device = OuterDevice::find($ids[$i]);
                     $device->shop_id = $shop->id;
-                    $device->save();
+
+                    //设置com接口返回card卡号
+                    $ip=$device->url;
+                    $flag=true;
+                    $msg="";
+                    try {
+                        Log::info("shop发送的外网ip:".$ip);
+                        $http = new GuzzleHttp\Client;
+                        $faceMaven=env('JAVA_FACE_MAVEN');
+                        $response = $http->get($faceMaven.'/setConfig', [
+                            'query' => [
+                                'ip' => $ip,
+                                'pass' => 'admin123',
+                                'comModType'=>4,
+                            ],
+                        ]);
+                        $res = json_decode( $response->getBody(), true);
+                        //log::info("res:".json_encode($res));
+                        $result=$res["success"];
+                        if($result!="true"){
+                            $flag=false;
+                            $msg=$res["data"];
+                            throw new ApiException(ErrorCode::DATABASE_ERROR, $msg);
+                        }
+                        //log::info("flag:".json_encode($flag));
+                    }catch (\Throwable $throwable){
+                        if ($throwable instanceof ClientException) {
+                            //doing something
+                            throw new ApiException(ErrorCode::CLIENT_ERROR, trans('exceptions.backend.restaurant.net_error'));
+                        }
+                        if ($throwable instanceof ServerException) {
+                            //doing something
+                            throw new ApiException(ErrorCode::SERVER_ERROR, trans('exceptions.backend.restaurant.net_error'));
+                        }
+                        throw new ApiException(ErrorCode::DATABASE_ERROR, trans('exceptions.backend.restaurant.net_error'));
+                    }
+                    if($flag){
+                        //log::info("save");
+                        $device->save();
+                    }
                 }
             }
         });

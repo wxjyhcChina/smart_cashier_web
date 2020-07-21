@@ -14,6 +14,7 @@ class ErrorCode
     const PARAM_ERROR = "PARAM_ERROR";
     const FATAL_ERROR = "FATAL_ERROR";
     const SERVER_ERROR = "SERVER_ERROR";
+    const CLIENT_ERROR = "CLIENT_ERROR";
 
     const RESOURCE_NOT_FOUND = "RESOURCE_NOT_FOUND";
 

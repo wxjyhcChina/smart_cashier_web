@@ -58,6 +58,7 @@ return [
             'mark_error' => '更新餐厅失败，请稍后重试',
             'update_error' => '更新餐厅失败，请稍后重试',
             'create_error' => '创建餐厅失败，请稍后重试',
+            'net_error' => '连接外部设备失败，请检查',
         ],
 
         'card' => [
