@@ -174,7 +174,10 @@ return [
                 'default' => '默认',
                 'discount'=>'是否前台打折',
                 'recharge'=>'是否前台充值',
-                'face'=>'是否使用人脸',
+                'face'=>'使用在线人脸',
+                'appId'=>'宇泛项目Id',
+                'appKey'=>'宇泛AppKey',
+                'appSecret'=>'宇泛AppSecret',
             ],
             'card' => [
                 'number' => 'IC卡号',

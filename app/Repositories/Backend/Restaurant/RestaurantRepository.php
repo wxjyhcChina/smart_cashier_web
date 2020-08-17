@@ -292,6 +292,10 @@ class RestaurantRepository extends BaseRestaurantRepository
         $shop->recharge_flag=1;//默认前台可充值
         $shop->discount_flag=1;//默认前台可打折
         //$shop->face_flag=0;//默认不使用人脸//移入paymethod
+        /**
+         * 内网穿透在android不好实现,改为使用在线人脸
+         */
+        $shop->face_flag=1;//默认使用在线人脸
         return $shop;
     }
 }

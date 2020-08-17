@@ -10,5 +10,5 @@ class Shop extends Model
 {
     use ShopAttribute, ShopRelationship;
 
-    protected $fillable = ['name', 'default', 'enabled','face_flag'];
+    protected $fillable = ['name', 'default', 'enabled','face_flag','appId','appKey','appSecret'];
 }

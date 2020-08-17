@@ -38,6 +38,27 @@
                     {{ Form::radio('face_flag', 0) }}否
                 </div><!--col-lg-1-->
             </div>
+            <div class="form-group">
+                {{ Form::label('default', trans('validation.attributes.backend.shop.appId').":", ['class' => 'col-lg-2 control-label']) }}
+
+                <div class="col-lg-10">
+                    {{ Form::text('appId', $shop->appId, ['class' => 'form-control', 'placeholder' => trans('validation.attributes.backend.shop.appId')]) }}
+                </div><!--col-lg-10-->
+            </div>
+            <div class="form-group">
+                {{ Form::label('default', trans('validation.attributes.backend.shop.appKey').":", ['class' => 'col-lg-2 control-label']) }}
+
+                <div class="col-lg-10">
+                    {{ Form::text('appKey', $shop->appKey, ['class' => 'form-control', 'placeholder' => trans('validation.attributes.backend.shop.appKey')]) }}
+                </div><!--col-lg-10-->
+            </div>
+            <div class="form-group">
+                {{ Form::label('default', trans('validation.attributes.backend.shop.appSecret').":", ['class' => 'col-lg-2 control-label']) }}
+
+                <div class="col-lg-10">
+                    {{ Form::text('appSecret', $shop->appSecret, ['class' => 'form-control', 'placeholder' => trans('validation.attributes.backend.shop.appSecret')]) }}
+                </div><!--col-lg-10-->
+            </div>
 
         </div><!-- /.box-body -->
     </div><!--box-->

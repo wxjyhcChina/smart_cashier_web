@@ -73,7 +73,7 @@ class BaseShopRepository extends BaseRepository
         try
         {
             DB::beginTransaction();
-
+            Log::info("input:".json_encode($input));
             $shop->update($input);
 
             DB::commit();
@@ -122,7 +122,7 @@ class BaseShopRepository extends BaseRepository
                     $flag=true;
                     $msg="";
                     try {
-                        Log::info("shop发送的外网ip:".$ip);
+                        Log::info("离线shop发送的外网ip:".$ip);
                         $http = new GuzzleHttp\Client;
                         $faceMaven=env('JAVA_FACE_MAVEN');
                         $response = $http->get($faceMaven.'/setConfig', [
