@@ -194,6 +194,7 @@ return [
                 'restaurant_id'=>'餐厅',
                 'shop_id'=>'小店',
                 'sources'=>'来源',
+                'deviceKey'=>'设备号',
                 'type'=>'类型',
                 'url'=>'外网地址',
                 'enabled'=>'启用'

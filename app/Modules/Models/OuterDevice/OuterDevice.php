@@ -10,5 +10,5 @@ class OuterDevice extends Model
 {
     use OuterDeviceAttribute, OuterDeviceRelationship;
 
-    protected $fillable = ['restaurant_id', 'shop_id', 'sources','type','url',"enabled"];
+    protected $fillable = ['restaurant_id', 'shop_id','deviceKey', 'sources','type','url',"enabled"];
 }

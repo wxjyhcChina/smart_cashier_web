@@ -266,6 +266,7 @@ return [
                 'id' => '编号',
                 'sources' => '来源',
                 'type' => '类型',
+                'deviceKey' => '设备编号',
                 'url' => '外网地址',
                 'created_at' => '创建时间',
             ]

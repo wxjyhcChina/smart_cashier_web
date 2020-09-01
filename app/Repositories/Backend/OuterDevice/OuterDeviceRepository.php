@@ -86,6 +86,7 @@ class OuterDeviceRepository extends BaseOuterDeviceRepository
         $device->sources = $input['sources'];
         $device->type = $input['type'];
         $device->url = $input['url'];
+        $device->deviceKey = $input['deviceKey'];
         $device->enabled = $input['enabled'];
 
         return $device;

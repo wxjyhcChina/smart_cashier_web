@@ -31,6 +31,7 @@
                             <th>{{ trans('labels.backend.outerDevice.table.id') }}</th>
                             <th>{{ trans('labels.backend.outerDevice.table.sources') }}</th>
                             <th>{{ trans('labels.backend.outerDevice.table.type') }}</th>
+                            <th>{{ trans('labels.backend.outerDevice.table.deviceKey') }}</th>
                             <th>{{ trans('labels.backend.outerDevice.table.url') }}</th>
                             <th>{{ trans('labels.general.actions') }}</th>
                         </tr>
@@ -112,6 +113,7 @@
                     {data: 'id', name: 'id'},
                     {data: 'sources', name: 'sources'},
                     {data: 'type', name: 'type'},
+                    {data: 'deviceKey', name: 'deviceKey'},
                     {data: 'url', name: 'url'},
                     {data: 'actions', name: 'actions', orderable: false, 'searchable':false}
                 ],

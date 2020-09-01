@@ -42,7 +42,15 @@
                 {{ Form::label('url', trans('validation.attributes.backend.outerDevice.url').":", ['class' => 'col-lg-2 control-label']) }}
 
                 <div class="col-lg-10">
-                    {{ Form::text('url', null, ['class' => 'form-control', 'required', 'placeholder' => trans('validation.attributes.backend.outerDevice.url')]) }}
+                    {{ Form::text('url', null, ['class' => 'form-control', '', 'placeholder' => trans('validation.attributes.backend.outerDevice.url')]) }}
+                </div><!--col-lg-10-->
+            </div><!--form control-->
+
+            <div class="form-group">
+                {{ Form::label('deviceKey', trans('validation.attributes.backend.outerDevice.deviceKey').":", ['class' => 'col-lg-2 control-label']) }}
+
+                <div class="col-lg-10">
+                    {{ Form::text('deviceKey', null, ['class' => 'form-control', 'required', 'placeholder' => trans('validation.attributes.backend.outerDevice.deviceKey')]) }}
                 </div><!--col-lg-10-->
             </div><!--form control-->
 

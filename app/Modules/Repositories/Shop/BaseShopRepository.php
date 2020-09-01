@@ -105,42 +105,50 @@ class BaseShopRepository extends BaseRepository
     }
 
     public function assignDevice($shop, $input){
+
         DB::transaction(function() use ($input, $shop) {
             OuterDevice::where('shop_id', $shop->id)->update(['shop_id' => null]);
-
+            $face_flag=$shop->face_flag;//使用在线人脸(0:不在线;1:在线)
             if(array_key_exists('id', $input))
             {
                 $ids = $input['id'];
-
+                $http = new GuzzleHttp\Client;
+                $faceMaven=env('JAVA_FACE_MAVEN');
+                $personsetGuid=$shop->personsetGuid;
+                Log::info("online1:".$personsetGuid);
+                if(empty($personsetGuid)){
+                    $personsetGuid="JYHC";
+                }
                 for($i =0 ; $i < count($ids); $i++)
                 {
                     $device = OuterDevice::find($ids[$i]);
                     $device->shop_id = $shop->id;
-
-                    //设置com接口返回card卡号
-                    $ip=$device->url;
                     $flag=true;
-                    $msg="";
+                    $result=0;//失败,1成功
                     try {
-                        Log::info("离线shop发送的外网ip:".$ip);
-                        $http = new GuzzleHttp\Client;
-                        $faceMaven=env('JAVA_FACE_MAVEN');
-                        $response = $http->get($faceMaven.'/setConfig', [
-                            'query' => [
-                                'ip' => $ip,
-                                'pass' => 'admin123',
-                                'comModType'=>4,
-                            ],
-                        ]);
-                        $res = json_decode( $response->getBody(), true);
-                        //log::info("res:".json_encode($res));
-                        $result=$res["success"];
-                        if($result!="true"){
-                            $flag=false;
-                            $msg=$res["data"];
-                            throw new ApiException(ErrorCode::DATABASE_ERROR, $msg);
+                        if($face_flag==1){
+                            //在线注册设备
+                            Log::info("online2:".$personsetGuid);
+                            $response = $http->get($faceMaven.'/onlineDevice/login', [
+                                'query' => [
+                                    'deviceKey' => $device->deviceKey,
+                                    'appKey' => $shop->appKey,
+                                    'appSecret'=>$shop->appSecret,
+                                    'appId'=>$shop->appId,
+                                    'personsetGuid'=>$personsetGuid,//授权组
+                                ],
+                            ]);
+                        }else{
+                            $ip=$device->url;
+                            Log::info("离线shop发送的外网ip:".$ip);
+                            $response = $http->get($faceMaven.'/setConfig', [
+                                'query' => [
+                                    'ip' => $ip,
+                                    'pass' => 'admin123',
+                                    'comModType'=>4,
+                                ],
+                            ]);
                         }
-                        //log::info("flag:".json_encode($flag));
                     }catch (\Throwable $throwable){
                         if ($throwable instanceof ClientException) {
                             //doing something
@@ -152,10 +160,92 @@ class BaseShopRepository extends BaseRepository
                         }
                         throw new ApiException(ErrorCode::DATABASE_ERROR, trans('exceptions.backend.restaurant.net_error'));
                     }
+
+                    $res = json_decode( $response->getBody(), true);
+                    $result=$res["success"];
+
+                    if($result===0){
+                        $flag=false;
+                        $msg=$res["data"];
+                        Log::info("msg:".json_encode($res));
+                        throw new ApiException(ErrorCode::DATABASE_ERROR, $msg);
+                    }else{
+                        Log::info("返回信息:".json_encode($res));
+                        $personsetGuid=$res["personsetGuid"];
+                    }
                     if($flag){
-                        //log::info("save");
+                        $shop->update(['personsetGuid'=>$personsetGuid]);
                         $device->save();
                     }
+                    /**
+                    if($face_flag==1){
+                        //在线注册设备
+                        Log::info("online");
+                        $result=0;
+                        try {
+                            $response = $http->get($faceMaven.'/onlineDevice/login', [
+                                'query' => [
+                                    'deviceKey' => $device->deviceKey,
+                                    'appKey' => $shop->appKey,
+                                    'appSecret'=>$shop->appSecret,
+                                    'appId'=>$shop->appId
+                                ],
+                            ]);
+                            $res = json_decode( $response->getBody(), true);
+                            Log::info("res111:".json_encode($res));
+                            $result=$res["success"];
+                        }catch (\Throwable $throwable){
+                            if ($throwable instanceof ClientException) {
+                                //doing something
+                                throw new ApiException(ErrorCode::CLIENT_ERROR, trans('exceptions.backend.restaurant.net_error'));
+                            }
+                            if ($throwable instanceof ServerException) {
+                                //doing something
+                                throw new ApiException(ErrorCode::SERVER_ERROR, trans('exceptions.backend.restaurant.net_error'));
+                            }
+                            throw new ApiException(ErrorCode::DATABASE_ERROR, trans('exceptions.backend.restaurant.net_error'));
+                        }
+                        if($result===0){
+                            $flag=false;
+                            $msg=$res["data"];
+                            Log::info("msg:".$msg);
+                            throw new ApiException(ErrorCode::DATABASE_ERROR, $msg);
+                        }
+                    }else{
+                        $ip=$device->url;
+                        $msg="";
+                        try {
+                            Log::info("离线shop发送的外网ip:".$ip);
+                            //设置com接口返回card卡号
+                            $response = $http->get($faceMaven.'/setConfig', [
+                                'query' => [
+                                    'ip' => $ip,
+                                    'pass' => 'admin123',
+                                    'comModType'=>4,
+                                ],
+                            ]);
+                            $res = json_decode( $response->getBody(), true);
+                            //log::info("res:".json_encode($res));
+                            $result=$res["success"];
+                            if($result!="true"){
+                                $flag=false;
+                                $msg=$res["data"];
+                                throw new ApiException(ErrorCode::DATABASE_ERROR, $msg);
+                            }
+                            //log::info("flag:".json_encode($flag));
+                        }catch (\Throwable $throwable){
+                            if ($throwable instanceof ClientException) {
+                                //doing something
+                                throw new ApiException(ErrorCode::CLIENT_ERROR, trans('exceptions.backend.restaurant.net_error'));
+                            }
+                            if ($throwable instanceof ServerException) {
+                                //doing something
+                                throw new ApiException(ErrorCode::SERVER_ERROR, trans('exceptions.backend.restaurant.net_error'));
+                            }
+                            throw new ApiException(ErrorCode::DATABASE_ERROR, trans('exceptions.backend.restaurant.net_error'));
+                        }
+                    }**/
+
                 }
             }
         });
